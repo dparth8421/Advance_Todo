@@ -42,7 +42,7 @@ const SingleTodo = ({ todo, setState, todos }: Props) => {
   }, [edit]);
   return (
     <form
-      className="flex rounded-md p-5 mt-4 bg-white"
+      className="flex rounded-md p-5 mt-4 bg-white shadow-md hover:bg-gray-300 transition duration-300 ease-in-out "
       onSubmit={(e) => handleEdit(e, todo.id)}
     >
       {edit ? (
@@ -50,7 +50,7 @@ const SingleTodo = ({ todo, setState, todos }: Props) => {
           ref={inputRef}
           value={editTodo}
           onChange={(e) => setEditTodo(e.target.value)}
-          className="outline-none"
+          className="outline-none rounded-md"
         />
       ) : todo.isDone ? (
         <s>{todo.todo}</s>
