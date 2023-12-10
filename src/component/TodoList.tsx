@@ -1,7 +1,6 @@
 import React from "react";
 import SingleTodo from "./SingleTodo";
 import { Todo } from "../Model";
-import { start } from "repl";
 
 interface Props {
   state: Todo[];
