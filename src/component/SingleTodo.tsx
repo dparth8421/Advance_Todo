@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Todo } from "../Model";
 import { MdEdit, MdDelete, MdOutlineDone } from "react-icons/md";
 import TodoList from "./TodoList";
@@ -34,6 +34,12 @@ const SingleTodo = ({ todo, setState, todos }: Props) => {
     );
     setEdit(false);
   };
+
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, [edit]);
   return (
     <form
       className="flex rounded-md p-5 mt-4 bg-white"
@@ -41,6 +47,7 @@ const SingleTodo = ({ todo, setState, todos }: Props) => {
     >
       {edit ? (
         <input
+          ref={inputRef}
           value={editTodo}
           onChange={(e) => setEditTodo(e.target.value)}
           className="outline-none"
