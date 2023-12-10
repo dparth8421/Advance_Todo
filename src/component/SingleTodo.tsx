@@ -3,14 +3,16 @@ import { Todo } from "../Model";
 import { MdEdit, MdDelete, MdOutlineDone } from "react-icons/md";
 import TodoList from "./TodoList";
 import { classicNameResolver } from "typescript";
+import { Draggable } from "react-beautiful-dnd";
 
 type Props = {
   todo: Todo;
+  index: number;
   todos: Todo[];
   setState: React.Dispatch<React.SetStateAction<Todo[]>>;
 };
 
-const SingleTodo = ({ todo, setState, todos }: Props) => {
+const SingleTodo = ({ index, todo, setState, todos }: Props) => {
   const [edit, setEdit] = useState<boolean>(false);
   const [editTodo, setEditTodo] = useState<string>(todo.todo);
 
@@ -41,48 +43,55 @@ const SingleTodo = ({ todo, setState, todos }: Props) => {
     inputRef.current?.focus();
   }, [edit]);
   return (
-    <form
-      className="flex rounded-md p-5 mt-4 bg-white shadow-md hover:bg-gray-300 transition duration-300 ease-in-out "
-      onSubmit={(e) => handleEdit(e, todo.id)}
-    >
-      {edit ? (
-        <input
-          ref={inputRef}
-          value={editTodo}
-          onChange={(e) => setEditTodo(e.target.value)}
-          className="outline-none rounded-md"
-        />
-      ) : todo.isDone ? (
-        <s>{todo.todo}</s>
-      ) : (
-        <span>{todo.todo}</span>
-      )}
+    <Draggable draggableId={todo.id.toString()} index={index}>
+      {(provided) => (
+        <form
+          ref={provided.innerRef}
+          {...provided.draggableProps}
+          {...provided.dragHandleProps}
+          className="flex rounded-md p-5 mt-4 bg-white shadow-md hover:bg-gray-300 transition duration-300 ease-in-out "
+          onSubmit={(e) => handleEdit(e, todo.id)}
+        >
+          {edit ? (
+            <input
+              ref={inputRef}
+              value={editTodo}
+              onChange={(e) => setEditTodo(e.target.value)}
+              className="outline-none rounded-md"
+            />
+          ) : todo.isDone ? (
+            <s>{todo.todo}</s>
+          ) : (
+            <span>{todo.todo}</span>
+          )}
 
-      <div className="flex px-2 py-1 ">
-        <span
-          className="px-2 cursor-pointer"
-          onClick={() => {
-            if (!edit && !todo.isDone) {
-              setEdit(!edit);
-            }
-          }}
-        >
-          <MdEdit />
-        </span>
-        <span
-          className="px-2 cursor-pointer"
-          onClick={() => handleDelete(todo.id)}
-        >
-          <MdDelete />
-        </span>
-        <span
-          className="px-2 cursor-pointer"
-          onClick={() => handleDone(todo.id)}
-        >
-          <MdOutlineDone />
-        </span>
-      </div>
-    </form>
+          <div className="flex px-2 py-1 ">
+            <span
+              className="px-2 cursor-pointer"
+              onClick={() => {
+                if (!edit && !todo.isDone) {
+                  setEdit(!edit);
+                }
+              }}
+            >
+              <MdEdit />
+            </span>
+            <span
+              className="px-2 cursor-pointer"
+              onClick={() => handleDelete(todo.id)}
+            >
+              <MdDelete />
+            </span>
+            <span
+              className="px-2 cursor-pointer"
+              onClick={() => handleDone(todo.id)}
+            >
+              <MdOutlineDone />
+            </span>
+          </div>
+        </form>
+      )}
+    </Draggable>
   );
 };
 
