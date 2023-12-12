@@ -1,8 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Todo } from "../Model";
 import { MdEdit, MdDelete, MdOutlineDone } from "react-icons/md";
-import TodoList from "./TodoList";
-import { classicNameResolver } from "typescript";
+
 import { Draggable } from "react-beautiful-dnd";
 
 type Props = {
@@ -16,6 +15,12 @@ const SingleTodo = ({ index, todo, setState, todos }: Props) => {
   const [edit, setEdit] = useState<boolean>(false);
   const [editTodo, setEditTodo] = useState<string>(todo.todo);
 
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, [edit]);
+
   const handleDone = (id: number) => {
     setState(
       todos.map((todo) =>
@@ -25,7 +30,7 @@ const SingleTodo = ({ index, todo, setState, todos }: Props) => {
   };
 
   const handleDelete = (id: number) => {
-    setState(todos.filter((todo) => todo.id != id));
+    setState(todos.filter((todo) => todo.id !== id));
   };
 
   const handleEdit = (e: React.FormEvent, id: number) => {
@@ -37,11 +42,6 @@ const SingleTodo = ({ index, todo, setState, todos }: Props) => {
     setEdit(false);
   };
 
-  const inputRef = useRef<HTMLInputElement>(null);
-
-  useEffect(() => {
-    inputRef.current?.focus();
-  }, [edit]);
   return (
     <Draggable draggableId={todo.id.toString()} index={index}>
       {(provided) => (

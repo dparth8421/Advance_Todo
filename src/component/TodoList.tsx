@@ -2,7 +2,6 @@ import React from "react";
 import SingleTodo from "./SingleTodo";
 import { Todo } from "../Model";
 import { Droppable } from "react-beautiful-dnd";
-import { stat } from "fs";
 
 interface Props {
   state: Todo[];
@@ -19,7 +18,7 @@ const TodoList: React.FC<Props> = ({
 }: Props) => {
   return (
     <div className="flex flex-col mt-3 w-11/12 md:flex-row md:justify-between items-start">
-      <Droppable droppableId="TodoList">
+      <Droppable droppableId="TodosList">
         {(provided) => (
           <div
             className="bg-red-400 p-4 mb-4 md:mb-0 md:w-1/2 md:mr-4 "
@@ -40,7 +39,7 @@ const TodoList: React.FC<Props> = ({
           </div>
         )}
       </Droppable>
-      <Droppable droppableId="Tremove">
+      <Droppable droppableId="TodosRemove">
         {(provided) => (
           <div
             className="bg-green-400 p-4 md:w-1/2"
@@ -48,7 +47,7 @@ const TodoList: React.FC<Props> = ({
             {...provided.droppableProps}
           >
             <span className="text-3xl text-white">Completed Tasks</span>
-            {completedTodos.map((todo, index) => (
+            {completedTodos?.map((todo, index) => (
               <SingleTodo
                 todo={todo}
                 index={index}
@@ -58,7 +57,6 @@ const TodoList: React.FC<Props> = ({
               />
             ))}
             {provided.placeholder}
-            {/* fixed issue of floating todo */}
           </div>
         )}
       </Droppable>
